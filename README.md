@@ -12,6 +12,7 @@ The goal of this language is to provide an easy way to write FlexRTE application
     - uint8_t, uint16_t, uint32_t
     - int8_t, int16_t, int32_t
     - bool
+    - Arrays / Strings
 - Functions
     - Arguments
     - Return value
