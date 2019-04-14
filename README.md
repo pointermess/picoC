@@ -1,6 +1,4 @@
-# picoC
-
-*This repository will contain a learning project and is currently only in planning phase.*
+# picoC Compiler
 
 picoC is a very small and low-level language based on C which only contains minimal language features such as functions and variables. Its only target platform is my [FlexRTE](https://github.com/pointermess/FlexRTE-X) platform.
 
