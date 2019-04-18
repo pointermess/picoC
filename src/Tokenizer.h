@@ -26,10 +26,12 @@ namespace PicoC
         Tokenizer();
         ~Tokenizer();
 
-        char StringChar;
+        char EscapeChar;
+        std::set<char> StringChars;
         std::set<char> StopChars;
         std::set<char> IgnoreChars;
         std::set<std::string> KeepTogether;
+
 
         std::vector<Token> Tokens;
 

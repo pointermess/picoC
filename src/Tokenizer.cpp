@@ -29,17 +29,19 @@ PicoC::Tokenizer::Tokenizer()
     // Initialize private variables
     FCurrentTokenIndex = 0;
 
+    EscapeChar = '\\';
+
     // specifying string char
-    StringChar = 0x27;
+    StringChars = { '"', 0x27 };
 
     // specifying stop chars
-    StopChars = { ' ', '.', ',', '<', '>', '(', ')', '{', '}', ':', '=', '&', '|', '+', '-', '/', '*', ';', '"', '\'',  10, 13, StringChar };
+    StopChars = { ' ', '.', ',', '<', '>', '(', ')', '{', '}', ':', '=', '&', '|', '+', '-', '/', '*', ';', '"', '\'', '!',  10, 13, '"', 0x27 };
 
     // specifying ignore chars
-    IgnoreChars = { ' ', 10, 13, StringChar };
+    IgnoreChars = { ' ', 10, 13, '"', 0x27 };
 
     // specifying and initializing keep together strings
-    KeepTogether = { ">=", "<=", "++", "--", "&&", "||", "->", "::" };
+    KeepTogether = { ">=", "<=", "++", "--", "&&", "||", "->", "::", "==", "+=", "-=", "*=" };
     _InitializeKeepTogetherChars();
 }
 
@@ -107,9 +109,10 @@ void PicoC::Tokenizer::Tokenize(std::string str)
     unsigned int keepTogether = 0;
 
     bool inString = false;
+    bool escapedChar = false;
 
     std::string buffer = "";
-
+    char currentStringChar = ' ';
 
     // loop through provided string
     int currentCharIndex = -1;
@@ -125,16 +128,21 @@ void PicoC::Tokenizer::Tokenize(std::string str)
         }
 
 
+        bool isCurrentCharInStringChars = in_set<char>(StringChars, currentChar);
+
         // check if in string
         if (inString)
         {
-            if (currentChar != StringChar) // check if string continues
+
+            if (currentChar != currentStringChar || escapedChar) // check if string continues
             {
                 buffer += currentChar;
+                escapedChar = false;
             }
             else
             {
-                buffer = StringChar + buffer + StringChar;
+                // stringchars
+                buffer = currentChar + buffer + currentChar;
 
                 Tokens.push_back({ buffer, position, line, Token::GetType(buffer) });
 
@@ -142,6 +150,10 @@ void PicoC::Tokenizer::Tokenize(std::string str)
                 inString = false;
             }
 
+            if (currentChar == EscapeChar)
+            {
+                escapedChar = true;
+            }
             continue;
         }
 
@@ -172,8 +184,11 @@ void PicoC::Tokenizer::Tokenize(std::string str)
             buffer = "";
         }
 
-        if (currentChar == StringChar)
+        if (isCurrentCharInStringChars)
+        {
+            currentStringChar = currentChar;
             inString = true;
+        }
 
         if (isCurrentCharInStopChars && !isCurrentCharInIgnoreChars)
         {
