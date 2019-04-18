@@ -4,7 +4,11 @@ picoC is a very small and low-level language based on C which only contains mini
 
 The goal of this language is to provide an easy way to write FlexRTE applications without the need of writing only low-level [FlexASM](https://github.com/pointermess/FlexASM-Compiler) code. It should also be kept as simple as possible as a I'd like to write a more complex compiler in the future.
 
+Most picoC code will not be compatible with the C standard.
+
 ### Planned features
+- Compiler directives
+    - #include
 - Global & Local Variables:
     - const, pointers/references
     - uint8_t, uint16_t, uint32_t
