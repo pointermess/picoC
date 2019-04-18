@@ -11,8 +11,8 @@ Most picoC code will not be compatible with the C standard.
     - #include
 - Global & Local Variables:
     - const, pointers/references
-    - uint8_t, uint16_t, uint32_t
-    - int8_t, int16_t, int32_t
+    - unsigned, signed
+    - char, short, int
     - bool
     - Arrays / Strings
 - Functions
