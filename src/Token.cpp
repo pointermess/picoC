@@ -20,34 +20,91 @@ FATokenType PicoC::Token::GetType(std::string TokenValue)
     // set token to lowercase
     str_to_lower(token);
 
-    if (token[token.length() - 1] == ':')
-        return ttLabel;
-    else if (token == "byte" || token == "word" || token == "dword")
-        return ttSize;
-    else if (token == "section")
-        return ttSectionKeyword;
-    else if (token == ",")
-        return ttOperandSplitter;
-    else if (token == "-")
-        return ttAddressSubtraction;
-    else if (token == "+")
-        return ttAddressAddition;
-    else if (token == "]")
-        return ttAddressCloser;
-    else if (token == "[")
-        return ttAddressOpener;
-    else if (token[0] == '0' && token[1] == 'x')
-        return ttConstHex;
-    else if (token[0] == '@')
-        return ttLabelAlias;
-    else if (token[0] == '.')
-        return ttDataAlias;
-    else if (token[0] == '%')
+    if (token[0] == '#')
         return ttCompilerCommand;
-    else if (token[0] == 0x27 && token[token.length() - 1] == 0x27)
+
+    else if (token[0] == '"' && token[token.length() - 1] == '"')
         return ttConstString;
     else if (is_number(token))
-        return ttConstDec;
 
-    return ttUnknown;
+        return ttConstDec;
+    else if (token[0] == '0' && token[1] == 'x')
+        return ttConstHex;
+
+    else if (token == "if")
+        return ttKeywordIf;
+    else if (token == "while")
+        return ttKeywordWhile;
+    else if (token == "return")
+        return ttKeywordReturn;
+
+    else if (token == "signed")
+        return ttTypeSigned;
+    else if (token == "unsigned")
+        return ttTypeUnsigned;
+    else if (token == "void")
+        return ttTypeVoid;
+    else if (token == "char")
+        return ttTypeChar;
+    else if (token == "short")
+        return ttTypeShort;
+    else if (token == "int")
+        return ttTypeInt;
+
+
+    else if (token == "(")
+        return ttSymbolLeftBrackt;
+    else if (token == ")")
+        return ttSymbolRightBracket;
+    else if (token == "[")
+        return ttSymbolLeftSquareBracket;
+    else if (token == "]")
+        return ttSymbolRightSquareBracket;
+    else if (token == "{")
+        return ttSymbolLeftCurlyBracket;
+    else if (token == "}")
+        return ttSymbolRightCurlyBracket;
+    else if (token == ",")
+        return ttSymbolComma;
+    else if (token == ";")
+        return ttSymbolSemicolon;
+    else if (token == "?")
+        return ttSymbolQuestionMark;
+    else if (token == ":")
+        return ttSymbolColon;
+    else if (token == "+")
+        return ttSymbolPlus;
+    else if (token == "-")
+        return ttSymbolDash;
+    else if (token == "*")
+        return ttSymbolAsteriks;
+    else if (token == "/")
+        return ttSymbolForwardSlash;
+    else if (token == "&")
+        return ttSymbolCommercialAnd;
+    else if (token == "&&")
+        return ttSymbolAnd;
+    else if (token == "||")
+        return ttSymbolOr;
+    else if (token == "!")
+        return ttSymbolExclamationMark;
+    else if (token == "=")
+        return ttSymbolDefine;
+    else if (token == "+=")
+        return ttSymbolDefinePlus;
+    else if (token == "-=")
+        return ttSymbolDefineMinus;
+    else if (token == "*=")
+        return ttSymbolDefineTimes;
+    else if (token == "==")
+        return ttSymbolEquals;
+    else if (token == "!=")
+        return ttSymbolNotEquals;
+    else if (token == "++")
+        return ttSymbolIncrement;
+    else if (token == "--")
+        return ttSymbolDecrement;
+
+    
+    return ttIdentifier;
 }

@@ -13,22 +13,53 @@ namespace PicoC
     enum FATokenType
     {
         ttUnknown,
+
         ttCompilerCommand,
-        ttInstruction,
+
         ttConstString,
         ttConstDec,
         ttConstHex,
-        ttRegister,
-        ttAddressOpener,
-        ttAddressCloser,
-        ttAddressAddition,
-        ttAddressSubtraction,
-        ttOperandSplitter,
-        ttSize,
-        ttLabel,
-        ttLabelAlias,
-        ttSectionKeyword,
-        ttDataAlias,
+
+        ttKeywordIf,
+        ttKeywordWhile,
+        ttKeywordReturn,
+
+        ttTypeSigned,
+        ttTypeUnsigned,
+        ttTypeVoid,
+        ttTypeChar,
+        ttTypeShort,
+        ttTypeInt,
+
+        ttSymbolLeftBrackt,
+        ttSymbolRightBracket,
+        ttSymbolLeftSquareBracket,
+        ttSymbolRightSquareBracket,
+        ttSymbolLeftCurlyBracket,
+        ttSymbolRightCurlyBracket,
+        ttSymbolComma,
+        ttSymbolSemicolon,
+        ttSymbolColon,
+        ttSymbolQuestionMark,
+        ttSymbolPlus,
+        ttSymbolDash,
+        ttSymbolAsteriks,
+        ttSymbolForwardSlash,
+        ttSymbolCommercialAnd,
+        ttSymbolAnd,
+        ttSymbolOr,
+        ttSymbolExclamationMark,
+        ttSymbolDefine,
+        ttSymbolDefinePlus,
+        ttSymbolDefineMinus,
+        ttSymbolDefineTimes,
+        ttSymbolEquals,
+        ttSymbolNotEquals,
+        ttSymbolIncrement,
+        ttSymbolDecrement,
+
+
+        ttIdentifier
     };
 
     struct Token
