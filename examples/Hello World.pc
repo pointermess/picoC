@@ -1,0 +1,17 @@
+int32_t main()
+{
+  uint8_t * helloWorldStr = "Hello World";
+  println(helloWorldStr);
+  
+  return 0;
+}
+
+void println(uint8_t * str)
+{
+  asm
+  {
+    mov eax, 3    ; print until 0
+    mov ebx, $str ; inline-assembler supports picoC variables
+    int 0x40      ; console system call
+  }
+}
