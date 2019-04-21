@@ -7,8 +7,6 @@ The goal of this language is to provide an easy way to write FlexRTE application
 Most picoC code will not be compatible with the C standard.
 
 ### Planned features
-- Compiler directives
-    - #include
 - Global & Local Variables:
     - const, pointers/references
     - unsigned, signed
@@ -22,6 +20,11 @@ Most picoC code will not be compatible with the C standard.
     - Defining structs containing variables
 - Inline-Assembler
     - With support of picoC variables
+- Compiler directives
+    - #include
+    - #pragma once
+    - #define
+    - #ifdef #ifndef #endif
 
 ### Examples
 #### Hello World
