@@ -24,7 +24,7 @@ Most picoC code will not be compatible with the C standard.
     - #include
     - #pragma once
     - #define
-    - #ifdef #ifndef #endif
+    - #ifdef #ifndef #else #endif
 
 ### Examples
 #### Hello World
