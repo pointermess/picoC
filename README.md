@@ -1,5 +1,7 @@
 # picoC Compiler
 
+**Disclaimer:** This project is a learning project and useless for almost everyone who visits this repository. :)
+
 picoC is a very small and low-level language based on C which only contains minimal language features such as functions and variables. Its only target platform is my [FlexRTE](https://github.com/pointermess/FlexRTE-X) platform.
 
 The goal of this language is to provide an easy way to write FlexRTE applications without the need of writing only low-level [FlexASM](https://github.com/pointermess/FlexASM-Compiler) code. It should also be kept as simple as possible as a I'd like to write a more complex compiler in the future.
