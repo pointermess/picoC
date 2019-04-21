@@ -53,7 +53,7 @@ FATokenType PicoC::Token::GetType(std::string TokenValue)
 
 
     else if (token == "(")
-        return ttSymbolLeftBrackt;
+        return ttSymbolLeftBracket;
     else if (token == ")")
         return ttSymbolRightBracket;
     else if (token == "[")

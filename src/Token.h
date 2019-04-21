@@ -31,7 +31,7 @@ namespace PicoC
         ttTypeShort,
         ttTypeInt,
 
-        ttSymbolLeftBrackt,
+        ttSymbolLeftBracket,
         ttSymbolRightBracket,
         ttSymbolLeftSquareBracket,
         ttSymbolRightSquareBracket,
