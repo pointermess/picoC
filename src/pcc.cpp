@@ -5,21 +5,26 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 #include "Tokenizer.h"
+#include "./Parser/ASTParser.h"
+#include "Utilities.h"
 #include <iostream>
+#include <math.h>
 #include <memory>
 using namespace PicoC;
+using namespace PicoC::Parser;
 int main()
 {
+    abs(-1);
     std::cout << "Hello World!\n"; 
 
     auto tokenizer = std::make_shared<Tokenizer>();
-    tokenizer->Tokenize("int32_t main(){uint8_t * helloWorldStr=\"Hello World\"; println(helloWorldStr); return 0;}void println(uint8_t * str){asm{mov eax, 3 mov ebx, $str int 0x40}}");
+    auto source = read_file("C:\\Users\\Milos\\hello_world.pc");
+    tokenizer->Tokenize(source);
 
-    while (tokenizer->IsInRange())
-    {
-        std::cout <<  tokenizer->GetCurrentToken().Value << std::endl;
-        tokenizer->NextToken();
-    }
+    auto astParser = std::make_shared<ASTParser>();
+    auto astProgram = std::make_shared<ASTProgram>();
+    astParser->ParseProgram(tokenizer, astProgram);
+
+
 }
