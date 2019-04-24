@@ -56,14 +56,17 @@ namespace PicoC
 
         class ASTProgram : public  ASTBlockElement
         {
-
+        public:
+            std::string ElementType = "ASTProgram";
+            void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTProgram> ASTProgramPtr;
 
 
         class ASTExpression : public ASTElement
         {
-
+        public:
+            void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTExpression> ASTExpressionPtr;
 
@@ -78,17 +81,22 @@ namespace PicoC
             std::vector<ASTExpressionPtr> Arguments;
         };
 
-        class ASTTypeExpression
+        enum ASTPointerTyp { ptNone, ptPointer, ptReference };
+        class ASTTypeExpression : public ASTElement
         {
         public:
+            std::string ElementType = "ASTTypeExpression";
             bool Signed = true;
+            ASTPointerTyp PointerType = ptNone;
             std::string DataType;
+            void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTTypeExpression> ASTTypeExpressionPtr;
 
         class ASTParenthesizedExpression : public ASTExpression
         {
         public:
+            std::string ElementType = "ASTParenthesizedExpression";
             ASTExpressionPtr Expression;
             void PrintDebug(int prependSpaces = 0);
         };
@@ -97,6 +105,7 @@ namespace PicoC
         class ASTNumericLiteralExperssion : public ASTExpression
         {
         public:
+            std::string ElementType = "ASTNumericLiteralExperssion";
             int Number;
             void PrintDebug(int prependSpaces = 0);
         };
@@ -105,8 +114,10 @@ namespace PicoC
         class ASTBinaryExpression : public ASTExpression
         {
         public:
+            std::string ElementType = "ASTBinaryExpression";
             ASTExpressionPtr Left;
             ASTExpressionPtr Right;
+            void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTBinaryExpression> ASTBinaryExpressionPtr;
 
@@ -120,6 +131,7 @@ namespace PicoC
         class ASTIdentifierExpression : public ASTExpression
         {
         public:
+            std::string ElementType = "ASTIdentifierExpression";
             std::string Name;
             void PrintDebug(int prependSpaces = 0);
         };
@@ -127,15 +139,22 @@ namespace PicoC
         class ASTVariableDeclaration : public ASTExpression
         {
         public:
+            std::string ElementType = "ASTVariableDeclaration";
+
             ASTTypeExpressionPtr Type;
             ASTIdentifierExpressionPtr Identifier;
+            ASTExpression Initialization;
             void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTVariableDeclaration> ASTVariableDeclarationPtr;
 
+
+
         class ASTFunctionDeclaration : public ASTExpression
         {
         public:
+            std::string ElementType = "FunctionDeclaration";
+
             ASTTypeExpressionPtr Type;
             ASTIdentifierExpressionPtr Identifier;
             std::vector<ASTVariableDeclarationPtr> Arguments;
@@ -143,5 +162,6 @@ namespace PicoC
             void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTFunctionDeclaration> ASTFunctionDeclarationPtr;
+
     }
 }
