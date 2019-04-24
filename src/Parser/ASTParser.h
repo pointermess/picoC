@@ -44,10 +44,7 @@ namespace PicoC
         class ASTParser
         {
         private:
-            bool _TryTypeExpression(TokenizerPtr tokenizer, int & skipped);
-            bool _TryFunctionDeclaration(TokenizerPtr tokenizer, int & skipped);
 
-            bool _TryAndParseNextSection(TokenizerPtr tokenizer, ASTProgramPtr program);
         public:
             // This object holds the current state of the parser
             ASTParserStatePtr State;
@@ -55,17 +52,17 @@ namespace PicoC
             ASTParser();
 
 
-            bool ParseProgram(TokenizerPtr tokenizer, ASTProgramPtr program);
+            bool ParseProgram(TokenizerPtr tokenizer, ASTProgramPtr& program);
 
-            bool ParseFunctionDeclaration(TokenizerPtr tokenizer, ASTProgramPtr program, ASTFunctionDeclarationPtr expression);
+            bool ParseFunctionDeclaration(TokenizerPtr tokenizer, ASTProgramPtr program, ASTFunctionDeclarationPtr& expression);
 
-            bool ParseBlock(TokenizerPtr tokenizer, ASTBlockElementPtr block);
+            bool ParseBlock(TokenizerPtr tokenizer, ASTBlockElementPtr& block);
 
-            bool ParseExpression(TokenizerPtr tokenizer, ASTExpressionPtr expression);
-            bool ParseTypeExpression(TokenizerPtr tokenizer, ASTTypeExpressionPtr expression);
-            bool ParseBinaryExpression(TokenizerPtr tokenizer, ASTBinaryExpressionPtr expression);
-            bool ParseNumericLiteralExpression(TokenizerPtr tokenizer, ASTNumericLiteralExpressionPtr expression);
-            bool ParseVariableDeclaration(TokenizerPtr tokenizer, ASTVariableDeclarationPtr expression);
+            bool ParseExpression(TokenizerPtr tokenizer, ASTExpressionPtr& expression);
+            bool ParseTypeExpression(TokenizerPtr tokenizer, ASTTypeExpressionPtr& expression);
+            bool ParseBinaryExpression(TokenizerPtr tokenizer, ASTBinaryExpressionPtr& expression);
+            bool ParseNumericLiteralExpression(TokenizerPtr tokenizer, ASTNumericLiteralExpressionPtr& expression);
+            bool ParseVariableDeclaration(TokenizerPtr tokenizer, ASTVariableDeclarationPtr& expression);
         };
         typedef std::shared_ptr<ASTParser> ASTParserPtr;
     }
