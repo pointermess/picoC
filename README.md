@@ -61,10 +61,10 @@ The AST parser is able to parse following picoC code int an AST:
 int& main()
 {
   int* a;
-  unsigned char a;
-  short a;
+  unsigned char b;
+  short c;
 }
-int* a;
+int* d;
 ```
 
 #### Abstract Syntax Tree
@@ -91,19 +91,19 @@ int* a;
                    Data Type: char
                    Pointer Type: None
                 |- ASTIdentifierExpression
-                   Name: a
+                   Name: b
             |- ASTVariableDeclaration
                 |- ASTTypeExpression
                    Signed: True
                    Data Type: short
                    Pointer Type: None
                 |- ASTIdentifierExpression
-                   Name: a
+                   Name: c
     |- ASTVariableDeclaration
         |- ASTTypeExpression
            Signed: True
            Data Type: int
            Pointer Type: Pointer
         |- ASTIdentifierExpression
-           Name: a
+           Name: d
 ```
