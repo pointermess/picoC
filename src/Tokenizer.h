@@ -18,6 +18,8 @@ namespace PicoC
     class Tokenizer
     {
     private:
+        int _RememberIndex = 0;
+
         int FCurrentTokenIndex;
         std::set<char> _KeepTogetherChars;
 
@@ -41,11 +43,14 @@ namespace PicoC
         int GetTokenIndex();
         void SetTokenIndex(int index);
 
-        void NextToken();
-        void PreviousToken();
+        bool NextToken();
+        bool PreviousToken();
         bool IsInRange();
 
         void Tokenize(std::string str);
+
+        void Remember();
+        void Reset();
     };
     typedef std::shared_ptr<Tokenizer> TokenizerPtr;
 

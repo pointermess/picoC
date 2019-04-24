@@ -8,6 +8,7 @@
 #include <iostream>
 #include <set>
 #include "Utilities.h"
+#include "Exceptions.h"
 
 #include "Tokenizer.h"
 
@@ -59,7 +60,7 @@ PicoC::Token PicoC::Tokenizer::GetCurrentToken()
     }
     catch (std::out_of_range e)
     {
-       // throw TokenizerEndOfFileException();
+        throw TokenizerOutOfRangeException();
     }
 }
 
@@ -72,7 +73,7 @@ PicoC::Token PicoC::Tokenizer::GetNextToken(int add)
     }
     catch (std::out_of_range e)
     {
-     //   throw TokenizerEndOfFileException();
+        throw TokenizerOutOfRangeException();
     }
 }
 
@@ -86,14 +87,16 @@ void PicoC::Tokenizer::SetTokenIndex(int index)
     FCurrentTokenIndex = index;
 }
 
-void PicoC::Tokenizer::NextToken()
+bool PicoC::Tokenizer::NextToken()
 {
     ++FCurrentTokenIndex;
+    return IsInRange();
 }
 
-void PicoC::Tokenizer::PreviousToken()
+bool PicoC::Tokenizer::PreviousToken()
 {
     --FCurrentTokenIndex;
+    return IsInRange();
 }
 
 bool PicoC::Tokenizer::IsInRange()
@@ -215,4 +218,14 @@ void PicoC::Tokenizer::Tokenize(std::string str)
             }
         }
     }
+}
+
+void PicoC::Tokenizer::Remember()
+{
+    _RememberIndex = FCurrentTokenIndex;
+}
+
+void PicoC::Tokenizer::Reset()
+{
+    FCurrentTokenIndex = _RememberIndex;
 }
