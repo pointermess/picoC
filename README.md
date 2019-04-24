@@ -49,3 +49,61 @@ void println(uint8_t * str)
   }
 }
 ```
+
+### Current progress
+- Tokenizer :heavy_check_mark: **Done**
+- Abstrac Syntax Tree **Current task**
+
+The AST parser is able to parse following picoC code int an AST:
+
+#### picoC
+```cpp
+int& main()
+{
+  int* a;
+  unsigned char a;
+  short a;
+}
+int* a;
+```
+
+#### Abstract Syntax Tree
+```
+|- ASTProgram
+    |- FunctionDeclaration
+        |- ASTTypeExpression
+           Signed: True
+           Data Type: int
+           Pointer Type: Reference
+        |- ASTIdentifierExpression
+           Name: main
+        |- BlockElement
+            |- ASTVariableDeclaration
+                |- ASTTypeExpression
+                   Signed: True
+                   Data Type: int
+                   Pointer Type: Pointer
+                |- ASTIdentifierExpression
+                   Name: a
+            |- ASTVariableDeclaration
+                |- ASTTypeExpression
+                   Signed: False
+                   Data Type: char
+                   Pointer Type: None
+                |- ASTIdentifierExpression
+                   Name: a
+            |- ASTVariableDeclaration
+                |- ASTTypeExpression
+                   Signed: True
+                   Data Type: short
+                   Pointer Type: None
+                |- ASTIdentifierExpression
+                   Name: a
+    |- ASTVariableDeclaration
+        |- ASTTypeExpression
+           Signed: True
+           Data Type: int
+           Pointer Type: Pointer
+        |- ASTIdentifierExpression
+           Name: a
+```
