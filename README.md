@@ -58,7 +58,7 @@ The AST parser is able to parse following picoC code int an AST:
 
 #### picoC
 ```cpp
-unsigned int main()
+unsigned int main(int arg1, int* arg2)
 {
   char a = (32+(10*8)-13);
   unsigned int& b;
@@ -78,6 +78,25 @@ char& e;
 + ASTProgram
   > Children:
     + ASTFunctionDeclaration
+      > Arguments:
+        + ASTVariableDeclaration
+          > Type:
+            + ASTTypeExpression
+              > Signed: True
+              > Data Type: int
+              > Pointer Type: None
+          > Identifier:
+            + ASTIdentifierExpression
+              > Name: arg1
+        + ASTVariableDeclaration
+          > Type:
+            + ASTTypeExpression
+              > Signed: True
+              > Data Type: int
+              > Pointer Type: Pointer
+          > Identifier:
+            + ASTIdentifierExpression
+              > Name: arg2
       > Type:
         + ASTTypeExpression
           > Signed: False
