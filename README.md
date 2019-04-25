@@ -60,9 +60,9 @@ The AST parser is able to parse following picoC code int an AST:
 ```cpp
 int& main()
 {
-  int* a;
-  unsigned char b;
-  short c;
+  char a = (32+(10*8)-13);
+  unsigned int b;
+  short* c;
 }
 int* d;
 ```
@@ -81,14 +81,30 @@ int* d;
             |- ASTVariableDeclaration
                 |- ASTTypeExpression
                    Signed: True
-                   Data Type: int
-                   Pointer Type: Pointer
+                   Data Type: char
+                   Pointer Type: None
                 |- ASTIdentifierExpression
                    Name: a
+                |- ASTParenthesizedExpression
+                    |- ASTBinaryExpression
+                       Operator: +
+                        |- ASTNumericLiteralExperssion
+                           Number: 32
+                        |- ASTBinaryExpression
+                           Operator: -
+                            |- ASTParenthesizedExpression
+                                |- ASTBinaryExpression
+                                   Operator: *
+                                    |- ASTNumericLiteralExperssion
+                                       Number: 10
+                                    |- ASTNumericLiteralExperssion
+                                       Number: 8
+                            |- ASTNumericLiteralExperssion
+                               Number: 13
             |- ASTVariableDeclaration
                 |- ASTTypeExpression
                    Signed: False
-                   Data Type: char
+                   Data Type: int
                    Pointer Type: None
                 |- ASTIdentifierExpression
                    Name: b
@@ -96,7 +112,7 @@ int* d;
                 |- ASTTypeExpression
                    Signed: True
                    Data Type: short
-                   Pointer Type: None
+                   Pointer Type: Pointer
                 |- ASTIdentifierExpression
                    Name: c
     |- ASTVariableDeclaration
