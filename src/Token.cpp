@@ -50,6 +50,8 @@ FATokenType PicoC::Token::GetType(std::string TokenValue)
         return ttTypeShort;
     else if (token == "int")
         return ttTypeInt;
+    else if (token == "bool")
+        return ttTypeBool;
 
 
     else if (token == "(")
@@ -100,6 +102,14 @@ FATokenType PicoC::Token::GetType(std::string TokenValue)
         return ttSymbolEquals;
     else if (token == "!=")
         return ttSymbolNotEquals;
+    else if (token == "<=")
+        return ttSymbolLowerEquals;
+    else if (token == ">=")
+        return ttSymbolGreaterEquals;
+    else if (token == "<")
+        return ttSymbolLower;
+    else if (token == ">")
+        return ttSymbolGreater;
     else if (token == "++")
         return ttSymbolIncrement;
     else if (token == "--")

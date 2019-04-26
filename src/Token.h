@@ -30,6 +30,7 @@ namespace PicoC
         ttTypeChar,
         ttTypeShort,
         ttTypeInt,
+        ttTypeBool,
 
         ttSymbolLeftBracket,
         ttSymbolRightBracket,
@@ -55,6 +56,10 @@ namespace PicoC
         ttSymbolDefineTimes,
         ttSymbolEquals,
         ttSymbolNotEquals,
+        ttSymbolLowerEquals,
+        ttSymbolGreaterEquals,
+        ttSymbolLower,
+        ttSymbolGreater,
         ttSymbolIncrement,
         ttSymbolDecrement,
 
