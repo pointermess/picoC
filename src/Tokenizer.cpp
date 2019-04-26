@@ -204,7 +204,7 @@ void PicoC::Tokenizer::Tokenize(std::string str)
 
                     if (keepBuffer == keepTogetherString)
                     {
-                        Tokens.push_back({ keepTogetherString, position, line, Token::GetType(std::string(1, currentChar)) });
+                        Tokens.push_back({ keepTogetherString, position, line, Token::GetType(keepTogetherString) });
                         keepTogether = keepTogetherString.length() - 1;
                     }
                 }
