@@ -63,6 +63,7 @@ namespace PicoC
             bool ParseBinaryExpression(TokenizerPtr tokenizer, ASTBinaryExpressionPtr& expression);
             bool ParseNumericLiteralExpression(TokenizerPtr tokenizer, ASTNumericLiteralExpressionPtr& expression);
             bool ParseVariableDeclaration(TokenizerPtr tokenizer, ASTVariableDeclarationPtr& expression);
+            bool ParseIfStatement(TokenizerPtr tokenizer, ASTIfStatementPtr& ifStatement);
         };
         typedef std::shared_ptr<ASTParser> ASTParserPtr;
     }

@@ -7,6 +7,7 @@
 
 #include <memory>
 #include "ASTParser.h"
+#include "../Exceptions.h"
 #include "../Utilities.h"
 using namespace PicoC;
 using namespace PicoC::Parser;
@@ -20,12 +21,8 @@ PicoC::Parser::ASTParser::ASTParser()
 
 bool ASTParser::ParseProgram(TokenizerPtr tokenizer, ASTProgramPtr& program)
 {
-    int skipped = 0;
     while (tokenizer->IsInRange())
     {
-        skipped = 0;
-
-
         ASTElementPtr element;
         ASTFunctionDeclarationPtr functionDeclaration;
         ASTVariableDeclarationPtr variableDeclaration;
@@ -84,7 +81,7 @@ bool PicoC::Parser::ASTParser::ParseFunctionDeclaration(TokenizerPtr tokenizer, 
         tokenizer->NextToken();
         token = tokenizer->GetCurrentToken();
 
-        // skip arguments if function already ends
+        // parse arguments if function doesnt end
         if (token.Type != ttSymbolRightBracket)
         {
             do
@@ -93,7 +90,7 @@ bool PicoC::Parser::ASTParser::ParseFunctionDeclaration(TokenizerPtr tokenizer, 
                 if (ParseVariableDeclaration(tokenizer, argument))
                 {
                     expression->Arguments.push_back(argument);
-                    tokenizer->NextToken();
+                    token = tokenizer->GetCurrentToken();
                 }
                 else
                 {
@@ -101,7 +98,12 @@ bool PicoC::Parser::ASTParser::ParseFunctionDeclaration(TokenizerPtr tokenizer, 
                     tokenizer->Reset();
                     return false;
                 }
-            } while (token.Type == ttSymbolComma);
+            } while (tokenizer->GetNextToken(-1).Type == ttSymbolComma);
+        }
+        else if (token.Type == ttSymbolRightBracket)
+        {
+            tokenizer->NextToken();
+            token = tokenizer->GetCurrentToken();
         }
     }
     else
@@ -111,30 +113,25 @@ bool PicoC::Parser::ASTParser::ParseFunctionDeclaration(TokenizerPtr tokenizer, 
         return false;
     }
 
-    if (token.Type == ttSymbolRightBracket)
+    if (token.Type == ttSymbolLeftCurlyBracket)
     {
         tokenizer->NextToken();
         token = tokenizer->GetCurrentToken();
-        if (token.Type == ttSymbolLeftCurlyBracket)
+        if (ParseBlock(tokenizer, expression->Body))
         {
-            tokenizer->NextToken();
             token = tokenizer->GetCurrentToken();
-            if (ParseBlock(tokenizer, expression->Body))
-            {
-                token = tokenizer->GetCurrentToken();
-                if (token.Type != ttSymbolRightCurlyBracket)
-                {
-                    // todo: log error
-                    tokenizer->Reset();
-                    return false;
-                }
-            }
-            else
+            if (token.Type != ttSymbolRightCurlyBracket)
             {
                 // todo: log error
                 tokenizer->Reset();
                 return false;
             }
+        }
+        else
+        {
+            // todo: log error
+            tokenizer->Reset();
+            return false;
         }
     }
     tokenizer->NextToken();
@@ -151,10 +148,15 @@ bool PicoC::Parser::ASTParser::ParseBlock(TokenizerPtr tokenizer, ASTBlockElemen
     {
         ASTElementPtr element;
         ASTVariableDeclarationPtr variableDeclaration;
+        ASTIfStatementPtr ifStatement;
 
         if (ParseVariableDeclaration(tokenizer, variableDeclaration))
         {
             block->Children.push_back(variableDeclaration);
+        }
+        else if (ParseIfStatement(tokenizer, ifStatement))
+        {
+            block->Children.push_back(ifStatement);
         }
         else
         {
@@ -171,11 +173,10 @@ bool ASTParser::ParseExpression(TokenizerPtr tokenizer, ASTExpressionPtr& expres
 {
     // generic experssion  parser method
     // single value
-
-    ASTExpressionPtr tempExpression;
+    tokenizer->Remember();
 
     // check if current expression might be a binary expression
-    Token token = tokenizer->GetNextToken();
+    Token token;
 
     token = tokenizer->GetCurrentToken();
     if (token.Type == ttConstDec)
@@ -194,46 +195,64 @@ bool ASTParser::ParseExpression(TokenizerPtr tokenizer, ASTExpressionPtr& expres
         if (token.Type != ttSymbolRightBracket)
         {
             // todo: log error
+            tokenizer->Reset();
             return false;
         }
+    }
+    else if (token.Type == ttIdentifier)
+    {
+        expression = std::make_shared<ASTIdentifierExpression>();
+        std::static_pointer_cast<ASTIdentifierExpression>(expression)->Name = token.Value;
     }
     else
     {
         // todo: log error
+        tokenizer->Reset();
         return false;
     }
 
     // check if current expression might be a binary expression
     tokenizer->NextToken();
-
-    if (tokenizer->IsInRange())
+    try
     {
         token = tokenizer->GetCurrentToken();
-
-        std::set<FATokenType> binaryOperators = {
-            ttSymbolPlus,
-            ttSymbolDash,
-            ttSymbolAsteriks,
-            ttSymbolForwardSlash,
-            ttSymbolAnd,
-            ttSymbolOr,
-            ttSymbolEquals,
-            ttSymbolNotEquals
-        };
-
-        if (in_set<FATokenType>(binaryOperators, token.Type))
-        {
-            ASTExpressionPtr secondExpression;
-            ParseExpression(tokenizer, secondExpression);
-
-            ASTBinaryExpressionPtr binaryExpression = std::make_shared<ASTBinaryExpression>();
-            binaryExpression->Left = expression;
-            binaryExpression->Right = secondExpression;
-
-
-            expression = binaryExpression;
-        }
     }
+    catch (TokenizerOutOfRangeException& e)
+    {
+        return true;
+    }
+
+    std::set<FATokenType> binaryOperators = {
+        ttSymbolPlus,
+        ttSymbolDash,
+        ttSymbolAsteriks,
+        ttSymbolForwardSlash,
+        ttSymbolAnd,
+        ttSymbolOr,
+        ttSymbolEquals,
+        ttSymbolNotEquals,
+        ttSymbolGreater,
+        ttSymbolGreaterEquals,
+        ttSymbolLower,
+        ttSymbolLowerEquals
+    };
+
+    if (in_set<FATokenType>(binaryOperators, token.Type))
+    {
+        std::string binaryOperator = token.Value;
+        tokenizer->NextToken();
+        ASTExpressionPtr secondExpression;
+        ParseExpression(tokenizer, secondExpression);
+
+        ASTBinaryExpressionPtr binaryExpression = std::make_shared<ASTBinaryExpression>();
+        binaryExpression->Left = expression;
+        binaryExpression->Right = secondExpression;
+        binaryExpression->Operator = binaryOperator;
+
+        expression = binaryExpression;
+    }
+
+    return true;
 }
 
 
@@ -256,7 +275,7 @@ bool PicoC::Parser::ASTParser::ParseTypeExpression(TokenizerPtr tokenizer, ASTTy
         token = tokenizer->GetCurrentToken();
     }
 
-    if ((token.Type >= ttTypeVoid && token.Type <= ttTypeInt) || (token.Type == ttIdentifier && signedSet == false))
+    if ((token.Type >= ttTypeVoid && token.Type <= ttTypeBool) || (token.Type == ttIdentifier && signedSet == false))
     {
         expression->DataType = token.Value;
         tokenizer->NextToken();
@@ -326,9 +345,16 @@ bool PicoC::Parser::ASTParser::ParseVariableDeclaration(TokenizerPtr tokenizer, 
     {
         tokenizer->NextToken();
         token = tokenizer->GetCurrentToken();
+
+        ASTExpressionPtr initExpression;
+        if (ParseExpression(tokenizer, initExpression))
+        {
+            expression->Initialization = initExpression;
+            token = tokenizer->GetCurrentToken();
+        }
     }
 
-    if (token.Type != ttSymbolSemicolon)
+    if (token.Type != ttSymbolSemicolon && token.Type != ttSymbolComma && token.Type != ttSymbolRightBracket)
     {
         // todo: log error
         tokenizer->Reset();
@@ -336,5 +362,85 @@ bool PicoC::Parser::ASTParser::ParseVariableDeclaration(TokenizerPtr tokenizer, 
     }
 
     tokenizer->NextToken();
+    return true;
+}
+
+bool PicoC::Parser::ASTParser::ParseIfStatement(TokenizerPtr tokenizer, ASTIfStatementPtr & ifStatement)
+{
+    ifStatement = std::make_shared< ASTIfStatement>();
+    tokenizer->Remember();
+    Token token = tokenizer->GetCurrentToken();
+
+    if (token.Type == ttKeywordIf)
+    {
+        tokenizer->NextToken();
+        token = tokenizer->GetCurrentToken();
+
+        if (token.Type == ttSymbolLeftBracket)
+        {
+            tokenizer->NextToken();
+            token = tokenizer->GetCurrentToken();
+
+            ASTExpressionPtr expression;
+            if (ParseExpression(tokenizer, expression))
+            {
+                ifStatement->Condition = expression;
+
+                token = tokenizer->GetCurrentToken();
+                if (token.Type != ttSymbolRightBracket)
+                {
+                    // todo: log error
+                    tokenizer->Reset();
+                    return false;
+                }
+            }
+            else
+            {
+                // todo: log error
+                tokenizer->Reset();
+                return false;
+            }
+        }
+        else
+        {
+            // todo: log error
+            tokenizer->Reset();
+            return false;
+        }
+    }
+    else
+    {
+        // todo: log error
+        tokenizer->Reset();
+        return false;
+    }
+
+    tokenizer->NextToken();
+    token = tokenizer->GetCurrentToken();
+
+    if (token.Type == ttSymbolLeftCurlyBracket)
+    {
+        tokenizer->NextToken();
+        ASTBlockElementPtr block;
+        if (ParseBlock(tokenizer, block))
+        {
+            ifStatement->Children = block->Children;
+            tokenizer->NextToken();
+            token = tokenizer->GetCurrentToken();
+        }
+        else
+        {
+            // todo: log error
+            tokenizer->Reset();
+            return false;
+        }
+    }
+    else
+    {
+        // todo: log error
+        tokenizer->Reset();
+        return false;
+    }
+
     return true;
 }
