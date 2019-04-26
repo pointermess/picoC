@@ -58,52 +58,172 @@ The AST parser is able to parse following picoC code int an AST:
 
 #### picoC
 ```cpp
-int& main()
+unsigned int main(int arg1, int* arg2)
 {
-  int* a;
-  unsigned char b;
-  short c;
+  char a = (32+(10*8)-13);
+  unsigned int& b;
+  short* c;
+  bool d = a >= 50;
+  
+  if (d && a > 66)
+  {
+    bool e = a + (d - 420);
+  }
 }
-int* d;
+char& e;
 ```
 
 #### Abstract Syntax Tree
 ```
-|- ASTProgram
-    |- FunctionDeclaration
-        |- ASTTypeExpression
-           Signed: True
-           Data Type: int
-           Pointer Type: Reference
-        |- ASTIdentifierExpression
-           Name: main
-        |- BlockElement
-            |- ASTVariableDeclaration
-                |- ASTTypeExpression
-                   Signed: True
-                   Data Type: int
-                   Pointer Type: Pointer
-                |- ASTIdentifierExpression
-                   Name: a
-            |- ASTVariableDeclaration
-                |- ASTTypeExpression
-                   Signed: False
-                   Data Type: char
-                   Pointer Type: None
-                |- ASTIdentifierExpression
-                   Name: b
-            |- ASTVariableDeclaration
-                |- ASTTypeExpression
-                   Signed: True
-                   Data Type: short
-                   Pointer Type: None
-                |- ASTIdentifierExpression
-                   Name: c
-    |- ASTVariableDeclaration
-        |- ASTTypeExpression
-           Signed: True
-           Data Type: int
-           Pointer Type: Pointer
-        |- ASTIdentifierExpression
-           Name: d
++ ASTProgram
+  > Children:
+    + ASTFunctionDeclaration
+      > Arguments:
+        + ASTVariableDeclaration
+          > Type:
+            + ASTTypeExpression
+              > Signed: True
+              > Data Type: int
+              > Pointer Type: None
+          > Identifier:
+            + ASTIdentifierExpression
+              > Name: arg1
+        + ASTVariableDeclaration
+          > Type:
+            + ASTTypeExpression
+              > Signed: True
+              > Data Type: int
+              > Pointer Type: Pointer
+          > Identifier:
+            + ASTIdentifierExpression
+              > Name: arg2
+      > Type:
+        + ASTTypeExpression
+          > Signed: False
+          > Data Type: int
+          > Pointer Type: None
+      > Identifier:
+        + ASTIdentifierExpression
+          > Name: main
+      > Body:
+        + BlockElement
+            + ASTVariableDeclaration
+              > Type:
+                + ASTTypeExpression
+                  > Signed: True
+                  > Data Type: char
+                  > Pointer Type: None
+              > Identifier:
+                + ASTIdentifierExpression
+                  > Name: a
+              > Initialization:
+                + ASTParenthesizedExpression
+                    + ASTBinaryExpression
+                      > Operator: +
+                      > Left:
+                        + ASTNumericLiteralExperssion
+                          > Number: 32
+                      > Right:
+                        + ASTBinaryExpression
+                          > Operator: -
+                          > Left:
+                            + ASTParenthesizedExpression
+                                + ASTBinaryExpression
+                                  > Operator: *
+                                  > Left:
+                                    + ASTNumericLiteralExperssion
+                                      > Number: 10
+                                  > Right:
+                                    + ASTNumericLiteralExperssion
+                                      > Number: 8
+                          > Right:
+                            + ASTNumericLiteralExperssion
+                              > Number: 13
+            + ASTVariableDeclaration
+              > Type:
+                + ASTTypeExpression
+                  > Signed: False
+                  > Data Type: int
+                  > Pointer Type: Reference
+              > Identifier:
+                + ASTIdentifierExpression
+                  > Name: b
+            + ASTVariableDeclaration
+              > Type:
+                + ASTTypeExpression
+                  > Signed: True
+                  > Data Type: short
+                  > Pointer Type: Pointer
+              > Identifier:
+                + ASTIdentifierExpression
+                  > Name: c
+            + ASTVariableDeclaration
+              > Type:
+                + ASTTypeExpression
+                  > Signed: True
+                  > Data Type: bool
+                  > Pointer Type: None
+              > Identifier:
+                + ASTIdentifierExpression
+                  > Name: d
+              > Initialization:
+                + ASTBinaryExpression
+                  > Operator: >=
+                  > Left:
+                    + ASTIdentifierExpression
+                      > Name: a
+                  > Right:
+                    + ASTNumericLiteralExperssion
+                      > Number: 50
+            + ASTIfStatement
+              > Condition:
+                + ASTBinaryExpression
+                  > Operator: &&
+                  > Left:
+                    + ASTIdentifierExpression
+                      > Name: d
+                  > Right:
+                    + ASTBinaryExpression
+                      > Operator: >
+                      > Left:
+                        + ASTIdentifierExpression
+                          > Name: a
+                      > Right:
+                        + ASTNumericLiteralExperssion
+                          > Number: 66
+              > Children:
+                + ASTVariableDeclaration
+                  > Type:
+                    + ASTTypeExpression
+                      > Signed: True
+                      > Data Type: bool
+                      > Pointer Type: None
+                  > Identifier:
+                    + ASTIdentifierExpression
+                      > Name: e
+                  > Initialization:
+                    + ASTBinaryExpression
+                      > Operator: +
+                      > Left:
+                        + ASTIdentifierExpression
+                          > Name: a
+                      > Right:
+                        + ASTParenthesizedExpression
+                            + ASTBinaryExpression
+                              > Operator: -
+                              > Left:
+                                + ASTIdentifierExpression
+                                  > Name: d
+                              > Right:
+                                + ASTNumericLiteralExperssion
+                                  > Number: 420
+    + ASTVariableDeclaration
+      > Type:
+        + ASTTypeExpression
+          > Signed: True
+          > Data Type: char
+          > Pointer Type: Reference
+      > Identifier:
+        + ASTIdentifierExpression
+          > Name: e
 ```
