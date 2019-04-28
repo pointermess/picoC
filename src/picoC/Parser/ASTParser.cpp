@@ -294,25 +294,32 @@ bool PicoC::Parser::ASTParser::ParseTypeExpression(TokenizerPtr tokenizer, ASTTy
 
         ASTTypePointerExpressionPtr typePtrExpression;
         ASTTypeElementPtr typeElementTemp = typeExpression;
+
         while (token.Type == ttSymbolAsteriks || token.Type == ttSymbolCommercialAnd)
         {
             typePtrExpression = std::make_shared<ASTTypePointerExpression>();
+
+            if (token.Type == ttSymbolAsteriks)
+            {
+                typePtrExpression->Type = ptPointer;
+            }
+            else if (token.Type == ttSymbolCommercialAnd)
+            {
+                typePtrExpression->Type = ptReference;
+            }
+
+
+            typePtrExpression->Element = typeElementTemp;
+            typeElementTemp = typePtrExpression;
+
+            tokenizer->NextToken();
+            token = tokenizer->GetCurrentToken();
+
         }
 
 
-        auto typePtrExpression = std::make_shared<ASTTypePointerExpression>();
+        expression = typeElementTemp;
 
-        if (token.Type == ttSymbolAsteriks)
-        {
-            typePtrExpression->Type = ptPointer;
-        }
-        else if (token.Type == ttSymbolCommercialAnd)
-        {
-            typePtrExpression->Type = ptReference;
-        }
-        typePtrExpression->Element = typeExpression;
-        expression = typePtrExpression;
-        tokenizer->NextToken();
     }
     else
     {
