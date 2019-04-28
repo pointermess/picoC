@@ -7,8 +7,8 @@
 
 #include <iostream>
 #include <set>
-#include "Utilities.h"
-#include "Exceptions.h"
+#include "../Utilities.h"
+#include "../Exceptions.h"
 
 #include "Tokenizer.h"
 

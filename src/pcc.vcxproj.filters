@@ -13,30 +13,75 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Tokenizer.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Token.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
+    <Filter Include="Quelldateien\picoC">
+      <UniqueIdentifier>{b4aeadf5-6e67-4484-910d-0c25ef21e197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\picoC\Representation">
+      <UniqueIdentifier>{ef93794f-2ca4-4368-9b3e-7fffd1379868}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\picoC\Generator">
+      <UniqueIdentifier>{4864bcb2-008e-4a6f-8949-629293a2e081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\picoC\Optimizer">
+      <UniqueIdentifier>{df143756-22f0-40dd-b15a-3e5a1faac828}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\picoC\Parser">
+      <UniqueIdentifier>{45413fe5-d54d-402a-8786-7d6ba43f7a26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pcc.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Tokenizer.cpp">
+    <ClCompile Include="picoC\Exceptions.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Token.cpp">
+    <ClCompile Include="picoC\Utilities.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp">
+    <ClCompile Include="picoC\Parser\ASTParser.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="picoC\Parser\Token.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Parser\Tokenizer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Representation\LookupTable.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Representation\ProgramRepresentation.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Representation\AST.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="picoC\Exceptions.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Utilities.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Parser\ASTParser.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Parser\Token.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Parser\Tokenizer.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Representation\LookupTable.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Representation\ProgramRepresentation.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Representation\AST.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

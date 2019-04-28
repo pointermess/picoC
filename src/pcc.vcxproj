@@ -151,15 +151,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Token.h" />
-    <ClInclude Include="Tokenizer.h" />
-    <ClInclude Include="Utilities.h" />
+    <ClCompile Include="pcc.cpp" />
+    <ClCompile Include="picoC\Exceptions.cpp" />
+    <ClCompile Include="picoC\Representation\AST.cpp" />
+    <ClCompile Include="picoC\Parser\ASTParser.cpp" />
+    <ClCompile Include="picoC\Parser\Token.cpp" />
+    <ClCompile Include="picoC\Parser\Tokenizer.cpp" />
+    <ClCompile Include="picoC\Representation\LookupTable.cpp" />
+    <ClCompile Include="picoC\Representation\ProgramRepresentation.cpp" />
+    <ClCompile Include="picoC\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pcc.cpp" />
-    <ClCompile Include="Token.cpp" />
-    <ClCompile Include="Tokenizer.cpp" />
-    <ClCompile Include="Utilities.cpp" />
+    <ClInclude Include="picoC\Exceptions.h" />
+    <ClInclude Include="picoC\Representation\AST.h" />
+    <ClInclude Include="picoC\Parser\ASTParser.h" />
+    <ClInclude Include="picoC\Parser\Token.h" />
+    <ClInclude Include="picoC\Parser\Tokenizer.h" />
+    <ClInclude Include="picoC\Representation\LookupTable.h" />
+    <ClInclude Include="picoC\Representation\ProgramRepresentation.h" />
+    <ClInclude Include="picoC\Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
