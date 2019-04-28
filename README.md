@@ -58,7 +58,7 @@ The AST parser is able to parse following picoC code int an AST:
 
 #### picoC
 ```cpp
-unsigned int main(int arg1, int* arg2)
+unsigned int main(int arg1 = 5, int* arg2)
 {
   char a = (32+(10*8)-13);
   unsigned int& b;
@@ -70,7 +70,7 @@ unsigned int main(int arg1, int* arg2)
     bool e = a + (d - 420);
   }
 }
-char& e;
+char*** e;
 ```
 
 #### Abstract Syntax Tree
@@ -84,16 +84,20 @@ char& e;
             + ASTTypeExpression
               > Signed: True
               > Data Type: int
-              > Pointer Type: None
           > Identifier:
             + ASTIdentifierExpression
               > Name: arg1
+          > Initialization:
+            + ASTNumericLiteralExperssion
+              > Number: 5
         + ASTVariableDeclaration
           > Type:
-            + ASTTypeExpression
-              > Signed: True
-              > Data Type: int
-              > Pointer Type: Pointer
+            + ASTTypePointerExpression
+              > Signed: Pointer
+              > Element:
+                + ASTTypeExpression
+                  > Signed: True
+                  > Data Type: int
           > Identifier:
             + ASTIdentifierExpression
               > Name: arg2
@@ -101,18 +105,16 @@ char& e;
         + ASTTypeExpression
           > Signed: False
           > Data Type: int
-          > Pointer Type: None
       > Identifier:
         + ASTIdentifierExpression
           > Name: main
       > Body:
-        + BlockElement
+        + ASTBlockElement
             + ASTVariableDeclaration
               > Type:
                 + ASTTypeExpression
                   > Signed: True
                   > Data Type: char
-                  > Pointer Type: None
               > Identifier:
                 + ASTIdentifierExpression
                   > Name: a
@@ -141,19 +143,23 @@ char& e;
                               > Number: 13
             + ASTVariableDeclaration
               > Type:
-                + ASTTypeExpression
-                  > Signed: False
-                  > Data Type: int
-                  > Pointer Type: Reference
+                + ASTTypePointerExpression
+                  > Signed: Reference
+                  > Element:
+                    + ASTTypeExpression
+                      > Signed: False
+                      > Data Type: int
               > Identifier:
                 + ASTIdentifierExpression
                   > Name: b
             + ASTVariableDeclaration
               > Type:
-                + ASTTypeExpression
-                  > Signed: True
-                  > Data Type: short
-                  > Pointer Type: Pointer
+                + ASTTypePointerExpression
+                  > Signed: Pointer
+                  > Element:
+                    + ASTTypeExpression
+                      > Signed: True
+                      > Data Type: short
               > Identifier:
                 + ASTIdentifierExpression
                   > Name: c
@@ -162,7 +168,6 @@ char& e;
                 + ASTTypeExpression
                   > Signed: True
                   > Data Type: bool
-                  > Pointer Type: None
               > Identifier:
                 + ASTIdentifierExpression
                   > Name: d
@@ -197,7 +202,6 @@ char& e;
                     + ASTTypeExpression
                       > Signed: True
                       > Data Type: bool
-                      > Pointer Type: None
                   > Identifier:
                     + ASTIdentifierExpression
                       > Name: e
@@ -219,10 +223,18 @@ char& e;
                                   > Number: 420
     + ASTVariableDeclaration
       > Type:
-        + ASTTypeExpression
-          > Signed: True
-          > Data Type: char
-          > Pointer Type: Reference
+        + ASTTypePointerExpression
+          > Signed: Pointer
+          > Element:
+            + ASTTypePointerExpression
+              > Signed: Pointer
+              > Element:
+                + ASTTypePointerExpression
+                  > Signed: Pointer
+                  > Element:
+                    + ASTTypeExpression
+                      > Signed: True
+                      > Data Type: char
       > Identifier:
         + ASTIdentifierExpression
           > Name: e
