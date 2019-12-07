@@ -14,9 +14,9 @@ using namespace PicoC::Parser;
 
 
 
-PicoC::Parser::ASTParser::ASTParser()
+PicoC::Parser::ASTParser::ASTParser(std::shared_ptr<CompilerState> compilerState)
 {
-    State = std::make_shared<ASTParserState>();
+    _CompilerState = compilerState;
 }
 
 bool ASTParser::ParseProgram(TokenizerPtr tokenizer, ASTProgramPtr& program)
@@ -41,6 +41,8 @@ bool ASTParser::ParseProgram(TokenizerPtr tokenizer, ASTProgramPtr& program)
         }
     }
 
+    
+    //program->ParseFunctionLookupTable();
     return true;
  }
 
@@ -149,6 +151,7 @@ bool PicoC::Parser::ASTParser::ParseBlock(TokenizerPtr tokenizer, ASTBlockElemen
         ASTElementPtr element;
         ASTVariableDeclarationPtr variableDeclaration;
         ASTIfStatementPtr ifStatement;
+        ASTFunctionCallExpressionPtr functionCall;
 
         if (ParseVariableDeclaration(tokenizer, variableDeclaration))
         {
@@ -157,6 +160,10 @@ bool PicoC::Parser::ASTParser::ParseBlock(TokenizerPtr tokenizer, ASTBlockElemen
         else if (ParseIfStatement(tokenizer, ifStatement))
         {
             block->Children.push_back(ifStatement);
+        }
+        else if (ParseFunctionCallExpression(tokenizer, functionCall))
+        {
+            block->Children.push_back(functionCall);
         }
         else
         {
@@ -391,6 +398,83 @@ bool PicoC::Parser::ASTParser::ParseVariableDeclaration(TokenizerPtr tokenizer, 
 
     tokenizer->NextToken();
     return true;
+}
+
+bool PicoC::Parser::ASTParser::ParseFunctionCallExpression(TokenizerPtr tokenizer, ASTFunctionCallExpressionPtr & expression)
+{
+    tokenizer->Remember();
+    expression = std::make_shared< ASTFunctionCallExpression>();
+
+    Token token = tokenizer->GetCurrentToken();
+
+    if (token.Type == ttIdentifier)
+    {
+        expression->Identifier = std::make_shared<ASTIdentifierExpression>();
+        expression->Identifier->Name = token.Value;
+
+        tokenizer->NextToken();
+        token = tokenizer->GetCurrentToken();
+
+        if (token.Type == ttSymbolLeftBracket)
+        {
+            if (tokenizer->GetNextToken().Type != ttSymbolRightBracket)
+            {
+                do
+                {
+                    tokenizer->NextToken();
+                    token = tokenizer->GetCurrentToken();
+
+                    ASTExpressionPtr argumentExpression;
+                    if (ParseExpression(tokenizer, argumentExpression))
+                    {
+                        expression->Arguments.push_back(argumentExpression);
+                        token = tokenizer->GetCurrentToken();
+                    }
+                    else
+                    {
+                        // todo: log error
+                        tokenizer->Reset();
+                        return false;
+                    }
+                } while (token.Type == ttSymbolComma);
+            }
+        }
+        else
+        {
+            // todo: log error
+            tokenizer->Reset();
+            return false;
+        }
+    }
+    else
+    {
+        // todo: log error
+        tokenizer->Reset();
+        return false;
+    }
+
+    if (token.Type == ttSymbolRightBracket)
+    {
+        tokenizer->NextToken();
+        token = tokenizer->GetCurrentToken();
+        if (token.Type == ttSymbolSemicolon)
+        {
+            tokenizer->NextToken();
+            return true;
+        }
+        else
+        {
+            // todo: log error
+            tokenizer->Reset();
+            return false;
+        }
+    }
+    else
+    {
+        // todo: log error
+        tokenizer->Reset();
+        return false;
+    }
 }
 
 bool PicoC::Parser::ASTParser::ParseIfStatement(TokenizerPtr tokenizer, ASTIfStatementPtr & ifStatement)

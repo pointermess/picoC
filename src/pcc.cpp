@@ -5,10 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#include "picoC/Representation/LookupTable.h"
 #include "./picoC/Parser/Tokenizer.h"
 #include "./picoC/Parser/ASTParser.h"
 #include "./picoC/Utilities.h"
-#include "picoC/Representation/LookupTable.h"
+#include "./picoC/Compiler.h"
 
 #include <iostream>
 #include <exception>
@@ -17,23 +18,13 @@
 
 using namespace PicoC;
 using namespace PicoC::Parser;
+
 int main()
 {
-    auto test = std::make_shared<LookupTable<int>>();
-    test->Add("test", 1);
-    int a = 0;
-    bool found = test->Find("test", a);
-
-    std::cout << "Hello World!\n"; 
-
-    auto tokenizer = std::make_shared<Tokenizer>();
-    auto source = read_file("C:\\Users\\Milos\\hello_world.pc");
-    tokenizer->Tokenize(source);
-
-    auto astParser = std::make_shared<ASTParser>();
-    auto astProgram = std::make_shared<ASTProgram>();
+    auto compiler = std::make_shared<Compiler>();
+    compiler->Settings.InputFile = "C:\\Users\\Milos\\hello_world.pc";
+    compiler->Settings.OutputFile = "C:\\Users\\Milos\\hello_world.fae";
+    compiler->Compile();
 
 
-    astParser->ParseProgram(tokenizer, astProgram);
-    astProgram->PrintDebug();
 }

@@ -1,16 +1,12 @@
 #pragma once
-#include "./AST.h"
+#include <memory>
+#include <string>
+#include "AST.h"
 
 namespace PicoC
 {
     namespace Representation
     {
-        class ProgramRepresentation
-        {
-        private:
 
-        public:
-            ProgramRepresentation(ASTProgramPtr program);
-        };
     }
 }

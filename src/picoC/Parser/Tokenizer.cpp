@@ -36,10 +36,15 @@ PicoC::Tokenizer::Tokenizer()
     StringChars = { '"', 0x27 };
 
     // specifying stop chars
-    StopChars = { ' ', '.', ',', '<', '>', '(', ')', '{', '}', ':', '=', '&', '|', '+', '-', '/', '*', ';', '"', '\'', '!',  10, 13, '"', 0x27 };
+    StopChars = {
+        ' ', '.', ',', '<', '>', '(', ')', '{', '}', ':', '=', '&', '|', '+', '-', '/', '*', ';', '"', '\'', '!', 
+        10, 13,         // New Line
+        0x42, 0x27,     // " and '    
+        0x9             // Tab
+    };
 
     // specifying ignore chars
-    IgnoreChars = { ' ', 10, 13, '"', 0x27 };
+    IgnoreChars = { ' ', 10, 13, '"', 0x27, 9 };
 
     // specifying and initializing keep together strings
     KeepTogether = { ">=", "<=", "++", "--", "&&", "||", "->", "::", "==", "+=", "-=", "*=" };

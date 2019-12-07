@@ -9,12 +9,15 @@
 #include <vector>
 #include <memory>
 
+#include "ProgramRepresentation.h"
 #include "LookupTable.h"
 
+using namespace PicoC::Representation;
 namespace PicoC
 {
     namespace Representation
     {
+        struct ProgramFunction;
         class AST
         {
         private:
@@ -41,6 +44,7 @@ namespace PicoC
             void SetParent(ASTElement* parent) { _parent = parent;  }
             ASTElement* GetParent() { return _parent; };
 
+
             virtual void PrintDebug(int prependSpaces = 0) = 0;
         };
 
@@ -60,6 +64,11 @@ namespace PicoC
         {
         public:
             std::string ElementType = "ASTProgram";
+
+            // representation
+
+            //void ParseFunctionLookupTable();
+
             void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTProgram> ASTProgramPtr;
@@ -76,26 +85,49 @@ namespace PicoC
         class ASTIdentifierExpression;
         typedef std::shared_ptr<ASTIdentifierExpression> ASTIdentifierExpressionPtr;
 
-        class ASTFunctionCallExpression : public ASTElement
+        class ASTFunctionCallExpression : public ASTExpression
         {
         public:
+            std::string ElementType = "ASTFunctionCallExpression";
             ASTIdentifierExpressionPtr Identifier;
             std::vector<ASTExpressionPtr> Arguments;
+            void PrintDebug(int prependSpaces = 0);
         };
+        typedef std::shared_ptr<ASTFunctionCallExpression> ASTFunctionCallExpressionPtr;
 
         enum ASTModifierType { mtNone, mtDereference, mtReference };
-        class VariableCallExpression : public ASTElement
+
+        class ASTVariableCallElement : public ASTElement
         {
-        public:
             std::string ElementType = "ASTTypePointerExpression";
             ASTModifierType Modifier = mtNone;
+            void PrintDebug(int prependSpaces = 0);
+        };
+
+        class ASTVariableCallIdentifier : public ASTElement
+        {
+        public:
+            std::string ElementType = "ASTVariableCallIdentifier";
+            ASTIdentifierExpressionPtr Identifier;
+            void PrintDebug(int prependSpaces = 0);
+        };
+
+        class ASTVariableCallModifier : public ASTElement
+        {
+        public:
+            std::string ElementType = "ASTVariableCallModifier";
+            ASTModifierType Modifier = mtNone;
+            ASTVariableCallElement Element;
             void PrintDebug(int prependSpaces = 0);
         };
 
         enum ASTPointerTyp { ptNone, ptPointer, ptReference };
         typedef std::shared_ptr<ASTPointerTyp> ASTPointerTypPtr;
 
-        class ASTTypeElement : public ASTExpression {};
+        class ASTTypeElement : public ASTExpression {
+        public:
+            virtual std::string GetTypeName() = 0;
+        };
         typedef std::shared_ptr<ASTTypeElement> ASTTypeElementPtr;
 
         class ASTTypePointerExpression : public ASTTypeElement
@@ -105,7 +137,7 @@ namespace PicoC
 
             ASTPointerTyp Type = ptNone;
             ASTTypeElementPtr Element;
-
+            std::string GetTypeName();
             void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTTypePointerExpression> ASTTypePointerExpressionPtr;
@@ -116,6 +148,7 @@ namespace PicoC
             std::string ElementType = "ASTTypeExpression";
             bool Signed = true;
             std::string DataType;
+            std::string GetTypeName();
             void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTTypeExpression> ASTTypeExpressionPtr;
@@ -173,10 +206,20 @@ namespace PicoC
             ASTIdentifierExpressionPtr Identifier;
             ASTExpressionPtr Initialization;
             void PrintDebug(int prependSpaces = 0);
+
+
+            std::string GetTypeName();
+            std::string GetVariableName();
         };
         typedef std::shared_ptr<ASTVariableDeclaration> ASTVariableDeclarationPtr;
 
 
+        class ASTFunctionDeclarationElement : public ASTExpression
+        {
+
+        };
+
+        
 
         class ASTFunctionDeclaration : public ASTExpression
         {
@@ -187,6 +230,10 @@ namespace PicoC
             ASTIdentifierExpressionPtr Identifier;
             std::vector<ASTVariableDeclarationPtr> Arguments;
             ASTBlockElementPtr Body;
+
+            std::string GetCallingName();
+            std::string GetFunctionName();
+
             void PrintDebug(int prependSpaces = 0);
         };
         typedef std::shared_ptr<ASTFunctionDeclaration> ASTFunctionDeclarationPtr;

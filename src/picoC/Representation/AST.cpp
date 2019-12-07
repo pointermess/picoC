@@ -29,6 +29,24 @@ void PicoC::Representation::ASTIdentifierExpression::PrintDebug(int prependSpace
     printf("%*s  > Name: %s\n", prependSpaces, "", Name.c_str());
 }
 
+std::string PicoC::Representation::ASTFunctionDeclaration::GetCallingName()
+{
+    std::string name = GetFunctionName() + "(";
+
+
+    for (ASTVariableDeclarationPtr& arg : Arguments)
+    {
+        name += "_" + arg->Type->GetTypeName();
+    }
+
+    return name + ")";
+}
+
+std::string PicoC::Representation::ASTFunctionDeclaration::GetFunctionName()
+{
+    return Identifier->Name;
+}
+
 void PicoC::Representation::ASTFunctionDeclaration::PrintDebug(int prependSpaces)
 {
     printf("%*s+ %s\n", prependSpaces, "", ElementType.c_str());
@@ -73,6 +91,11 @@ void PicoC::Representation::ASTVariableDeclaration::PrintDebug(int prependSpaces
     }
 }
 
+std::string PicoC::Representation::ASTTypeExpression::GetTypeName()
+{
+    return DataType;
+}
+
 void PicoC::Representation::ASTTypeExpression::PrintDebug(int prependSpaces)
 {
     printf("%*s+ %s\n", prependSpaces, "", ElementType.c_str());
@@ -89,6 +112,8 @@ void PicoC::Representation::ASTTypeExpression::PrintDebug(int prependSpaces)
 
 
 }
+
+
 
 void PicoC::Representation::ASTProgram::PrintDebug(int prependSpaces)
 {
@@ -130,6 +155,11 @@ void PicoC::Representation::ASTIfStatement::PrintDebug(int prependSpaces)
     }
 }
 
+std::string PicoC::Representation::ASTTypePointerExpression::GetTypeName()
+{
+    return Element->GetTypeName() + "*";
+}
+
 void PicoC::Representation::ASTTypePointerExpression::PrintDebug(int prependSpaces)
 {
     printf("%*s+ %s\n", prependSpaces, "", ElementType.c_str());
@@ -144,4 +174,18 @@ void PicoC::Representation::ASTTypePointerExpression::PrintDebug(int prependSpac
 
     printf("%*s  > Element:\n", prependSpaces, "");
     Element->PrintDebug(prependSpaces + 4);
+}
+
+void PicoC::Representation::ASTFunctionCallExpression::PrintDebug(int prependSpaces)
+{
+    printf("%*s+ %s\n", prependSpaces, "", ElementType.c_str());
+
+    printf("%*s  > Identifier:\n", prependSpaces, "");
+    Identifier->PrintDebug(prependSpaces + 4);
+
+    printf("%*s  > Arguments:\n", prependSpaces, "");
+    for (ASTExpressionPtr& argument : Arguments)
+    {
+        argument->PrintDebug(prependSpaces + 4);
+    }
 }

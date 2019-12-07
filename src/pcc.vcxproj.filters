@@ -57,6 +57,27 @@
     <ClCompile Include="picoC\Representation\AST.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="picoC\Generator\CodeGenerator.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Optimizer\CodeOptimizer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Compiler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\CompilerResult.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Representation\ProgramStruct.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Types.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="picoC\Generator\ProgramAssembly.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="picoC\Exceptions.h">
@@ -81,6 +102,27 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="picoC\Representation\AST.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Generator\CodeGenerator.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Optimizer\CodeOptimizer.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Compiler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\CompilerResult.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Representation\ProgramStruct.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Types.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="picoC\Generator\ProgramAssembly.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

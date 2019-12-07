@@ -6,7 +6,7 @@ namespace PicoC
 {
     namespace Representation
     {
-        template<typename T>
+        template <typename T>
         class LookupTable
         {
         private:
@@ -14,12 +14,16 @@ namespace PicoC
         public:
             void Add(const std::string name, T value);
             const bool Find(const std::string name, T& value);
+
+            const std::map<std::string, T>& GetMap() { return _LookupTable; };
         };
+
         template<typename T>
         inline void LookupTable<T>::Add(const std::string name, T value)
         {
             _LookupTable.insert(std::pair<std::string, T>(name, value));
         }
+
         template<typename T>
         inline const bool LookupTable<T>::Find(const std::string name, T & value)
         {
@@ -30,5 +34,6 @@ namespace PicoC
             }
             return false;
         }
+
     }
 }
